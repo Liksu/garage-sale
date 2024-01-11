@@ -1,0 +1,79 @@
+import { ReactElement, useContext } from 'react'
+import { useParams } from 'react-router-dom'
+import { DataContext } from '../data/data-provider'
+import { Badge, Button, Group, Space, Spoiler, Stack, Title, useMantineTheme } from '@mantine/core'
+import { Carousel } from '@mantine/carousel'
+import Photo from '../helpers/photo'
+import { useMediaQuery } from '@mantine/hooks'
+import classes from './product-page.module.css'
+import Price from '../helpers/price'
+import CartButton from '../cart/cart-button'
+import { IconExternalLink } from '@tabler/icons-react'
+import ShortUrl from '../helpers/short-url'
+import NavigateWithQuery from '../helpers/navigate-with-query'
+import LinkWithQuery from '../helpers/link-with-query'
+
+export default function ProductPage(): ReactElement {
+    const params = useParams()
+    const theme = useMantineTheme()
+    const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`)
+    const { getProductById } = useContext(DataContext)
+
+    if (!params.productId) {
+        return <NavigateWithQuery to={'/'} />
+    }
+
+    const product = getProductById(params.productId)
+    if (!product) {
+        return <NavigateWithQuery to={'/'} />
+    }
+
+    const slides = product.images.map(image => (
+        <Carousel.Slide key={image}>
+            <Photo product={product} image={image} />
+        </Carousel.Slide>
+    ))
+
+    return (<Stack gap="sm">
+        <Title order={2}>{product.name}</Title>
+        {product.sold
+            ? <Badge color="red" variant="light" size="xl">Продано</Badge>
+            :
+            product.booked
+                ? <Badge color="yellow" variant="light" size="xl">Заброньовано</Badge>
+                : null}
+        <Space h="md" />
+
+        <Carousel
+            classNames={classes}
+            slideSize="100%"
+            height={200}
+            slideGap="sm"
+            withIndicators
+        >
+            {slides}
+        </Carousel>
+
+        <Space h="md" />
+
+        <Group>
+            <Title order={2} fw={400} c="red"><Price sum={product.price} /></Title>
+            <CartButton product={product} />
+        </Group>
+
+        <Spoiler maxHeight={mobile ? 120 : 300} showLabel="Показати більше" hideLabel="Сховати" transitionDuration={0}>
+            {product.description}
+        </Spoiler>
+
+        <Space h="md" />
+        <Group gap="md">
+            {product.urls?.map(url => (
+                <LinkWithQuery to={url} key={url} target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" rightSection={<IconExternalLink size={16} />}>
+                        <ShortUrl url={url} />
+                    </Button>
+                </LinkWithQuery>
+            )) ?? null}
+        </Group>
+    </Stack>)
+}

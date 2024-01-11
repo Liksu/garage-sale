@@ -1,13 +1,5 @@
-# Set Products
-
-```
-?products=https://sale.liksu.com/data/products.json
-```
-
-Type of data:
-
-```ts
-Array<{
+export type ProductId = string
+export interface Product {
     id: ProductId
     name: string
     price: Record<Currency, number>
@@ -17,5 +9,12 @@ Array<{
     urls?: string[]
     sold?: boolean
     booked?: boolean | string
-}>
-```
+}
+
+export type Cart = ProductId[]
+export type Products = Product[]
+
+export enum Currency {
+    UAH = 'uah',
+    USD = 'usd'
+}
