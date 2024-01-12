@@ -1,5 +1,6 @@
 import { createContext, FC, PropsWithChildren, useEffect, useState } from 'react'
 import { Cart, Product, Products } from '../types'
+import { throws } from 'node:assert'
 
 export interface DataProviderType {
     products: Products | null
@@ -16,15 +17,36 @@ export const DataContext = createContext<DataProviderType>({
 })
 
 const productsLink = window.params.get('products')
-const productsURL = productsLink ?? '/data/products.json'
+const productsURL = productsLink ?? '/data/kyiv.json'
+const isJS = productsURL.endsWith('.js')
 
 export const DataProvider: FC<PropsWithChildren> = ({ children }) => {
     const [products, setProducts] = useState<Products | null>(null)
 
     useEffect(() => {
         fetch(productsURL, { cache: 'no-store' })
-            .then(response => response.json())
-            .then(data => setProducts(data))
+            .then(response => response[isJS ? 'text' : 'json']())
+            .then(data => {
+                if (isJS) {
+                    if (window.Worker) {
+                        const worker = new Worker('/loader.js')
+                        worker.postMessage(data)
+                        worker.onmessage = (event) => {
+                            if (Array.isArray(event.data)) {
+                                setProducts(event.data)
+                            } else {
+                                setProducts([])
+                            }
+                        }
+                    } else {
+                        throw new Error( 'Web worker is not supported')
+                    }
+                    
+                    return
+                }
+                
+                setProducts(data)
+            })
     }, [])
 
     const getProductById = (id: string): Product | null => {

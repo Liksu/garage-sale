@@ -16,7 +16,7 @@
   {
     "id": "piano",
     "name": "Синтезатор Casio CTK-3500 із стійкою",
-    "sold": true,
+    "booked": true,
     "price": {
       "uah": 6000,
       "usd": 155
