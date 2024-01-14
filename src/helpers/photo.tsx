@@ -11,7 +11,7 @@ interface PhotoProps {
 }
 
 export default function Photo({ product, image, fit = 'contain', height, style = {}, ...rest }: PhotoProps): ReactElement {
-    image ??= product.images[0]
+    image ??= product.images?.[0]
     if (!image) return (<></>)
     const url = image.startsWith('http') ? image : `/data/photos/${product.id}/${image}`
     return <Image src={url} alt={product.name} height={height ?? 200} style={{ objectFit: fit, ...style }} {...rest} />

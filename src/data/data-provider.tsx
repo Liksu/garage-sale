@@ -1,6 +1,5 @@
 import { createContext, FC, PropsWithChildren, useEffect, useState } from 'react'
 import { Cart, Product, Products } from '../types'
-import { throws } from 'node:assert'
 
 export interface DataProviderType {
     products: Products | null
@@ -17,7 +16,7 @@ export const DataContext = createContext<DataProviderType>({
 })
 
 const productsLink = window.params.get('products')
-const productsURL = productsLink ?? '/data/kyiv.json'
+const productsURL = productsLink ?? 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTHMD4_md7j2ilBSLg_qrAl3lo3IYXWWCSYtDZvaTEV7FfBwBu2D7f-B-dk31-kvFV_lXvs98dHpc7e/pub?gid=1077703447&single=true&output=tsv'
 const isJS = productsURL.endsWith('.js')
 
 export const DataProvider: FC<PropsWithChildren> = ({ children }) => {

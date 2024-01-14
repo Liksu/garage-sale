@@ -7,7 +7,7 @@ import LinkWithQuery from './helpers/link-with-query'
 function Layout() {
     const isActive = useMatch('/') != null
 
-    const logo = <Title order={4} c="dimmed">Sale</Title>
+    const logo = <Title order={4} c="dimmed">{isActive ? null : <strong>&larr; </strong>}Sale</Title>
 
     return (
         <AppShell
