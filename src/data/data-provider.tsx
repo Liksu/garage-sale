@@ -10,9 +10,9 @@ export interface DataProviderType {
 
 export const DataContext = createContext<DataProviderType>({
     products: null,
-    getProductById: (id: string) => null,
-    filterProducts: (filter: string) => null,
-    showSelected: (ids: Cart) => []
+    getProductById: () => null,
+    filterProducts: () => null,
+    showSelected: () => []
 })
 
 const productsLink = window.params.get('products')
