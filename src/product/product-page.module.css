@@ -4,3 +4,7 @@
         cursor: default;
     }
 }
+
+.root {
+    background-color: var(--mantine-color-gray-0);
+}

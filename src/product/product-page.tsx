@@ -30,7 +30,7 @@ export default function ProductPage(): ReactElement {
 
     const slides = product.images.map(image => (
         <Carousel.Slide key={image}>
-            <Photo product={product} image={image} />
+            <Photo product={product} image={image} height={400} />
         </Carousel.Slide>
     ))
 
@@ -47,8 +47,9 @@ export default function ProductPage(): ReactElement {
         <Carousel
             classNames={classes}
             slideSize="100%"
-            height={200}
+            height={400}
             slideGap="sm"
+            py="xs"
             withIndicators
         >
             {slides}
