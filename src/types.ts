@@ -2,7 +2,7 @@ export type ProductId = string
 export interface Product {
     id: ProductId
     name: string
-    price: Record<Currency, number>
+    price: Record<string, number>
     shortDescription?: string
     description?: string
     images: string[]
@@ -14,7 +14,16 @@ export interface Product {
 export type Cart = ProductId[]
 export type Products = Product[]
 
-export enum Currency {
-    UAH = 'uah',
-    USD = 'usd'
+export type Currency = string
+
+export interface Dictionary {
+    [key: string]: Translation
+}
+
+export type Translation = string | Array<string> | Dictionary
+
+export interface Config {
+    config: true
+    defaultCurrency?: Currency
+    defaultLanguage?: string
 }

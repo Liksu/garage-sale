@@ -1,13 +1,15 @@
-import { ReactElement, Fragment } from 'react'
+import { ReactElement, Fragment, useContext } from 'react'
 import { Card, Divider, Loader, SimpleGrid, Text } from '@mantine/core'
 import ListItem from './list-item'
 import { Products } from '../types'
+import { TranslationContext } from '../helpers/translation-provider'
 
 export interface ListProps {
     products: Products | null
 }
 
 export default function List({ products }: ListProps): ReactElement {
+    const { ta } = useContext(TranslationContext)
     if (!products) return <Loader />
 
     if (products.length === 0) {
@@ -15,7 +17,7 @@ export default function List({ products }: ListProps): ReactElement {
     }
 
     // available, sold, booked
-    const titles = ['Доступно', 'Заброньовано', 'Продано']
+    const titles = ta('product categories')
     const sections = products
         .reduce((acc, product) => {
             acc[product.booked ? 1 : product.sold ? 2 : 0].push(product)

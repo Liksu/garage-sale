@@ -1,10 +1,7 @@
-// provider that handles adding/removing items from the cart and calculating the total price
-
 import React, { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from 'react'
-import { Cart, Product, Products } from '../types'
+import { Cart, Product } from '../types'
 import { DataContext } from '../data/data-provider'
 import { CurrencyContext } from '../helpers/currency-provider'
-import { useSearchParams } from 'react-router-dom'
 
 export interface CartProviderType {
     addToCart: (id: string) => void
@@ -35,7 +32,7 @@ if (!initialCart) {
 }
 
 export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
-    const { products } = useContext(DataContext)
+    const { products, getPrice } = useContext(DataContext)
     const [cart, setCart] = useState<Cart>(initialCart ?? [])
     const [sum, setSum] = useState(0)
     const { currency } = useContext(CurrencyContext)
@@ -48,10 +45,10 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     const removeFromCart = (id: string) => {
         setCart(() => cart.filter(itemId => itemId !== id))
     }
-
+    
     useEffect(() => {
         window.params.set('cart', cart.join(','))
-        const sum = cart.reduce((acc, id) => acc + (products?.find(product => product.id === id && !product.sold)?.price[currency] || 0), 0)
+        const sum = cart.reduce((acc, id) => acc + getPrice(id, currency), 0)
         setSum(() => sum)
         window.localStorage.setItem('cart', JSON.stringify(cart))
     }, [cart, products])

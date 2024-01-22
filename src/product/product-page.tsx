@@ -12,12 +12,14 @@ import { IconExternalLink } from '@tabler/icons-react'
 import ShortUrl from '../helpers/short-url'
 import NavigateWithQuery from '../helpers/navigate-with-query'
 import LinkWithQuery from '../helpers/link-with-query'
+import { TranslationContext } from '../helpers/translation-provider'
 
 export default function ProductPage(): ReactElement {
     const params = useParams()
     const theme = useMantineTheme()
     const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`)
     const { getProductById } = useContext(DataContext)
+    const { t } = useContext(TranslationContext)
 
     if (!params.productId) {
         return <NavigateWithQuery to={'/'} />
@@ -37,10 +39,10 @@ export default function ProductPage(): ReactElement {
     return (<Stack gap="sm">
         <Title order={2}>{product.name}</Title>
         {product.sold
-            ? <Badge color="red" variant="light" size="xl">Продано</Badge>
+            ? <Badge color="red" variant="light" size="xl">{t('sold')}</Badge>
             :
             product.booked
-                ? <Badge color="yellow" variant="light" size="xl">Заброньовано</Badge>
+                ? <Badge color="yellow" variant="light" size="xl">{t('booked')}</Badge>
                 : null}
         <Space h="md" />
 
@@ -62,7 +64,7 @@ export default function ProductPage(): ReactElement {
             <CartButton product={product} />
         </Group>
 
-        <Spoiler maxHeight={mobile ? 120 : 300} showLabel="Показати більше" hideLabel="Сховати" transitionDuration={0}>
+        <Spoiler maxHeight={mobile ? 120 : 300} showLabel={t('show more')} hideLabel={t('hide')} transitionDuration={0}>
             {product.description}
         </Spoiler>
 

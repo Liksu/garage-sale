@@ -12,6 +12,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import ProductPage from './product/product-page'
 import Catalog from './list/catalog'
 import Cart from './cart/cart'
+import { TranslationProvider } from './helpers/translation-provider'
+import { ConfigProvider } from './helpers/config-provider'
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -27,6 +29,10 @@ const router = createBrowserRouter([
         element: <Layout />,
         children: [
             {
+                path: ':productId',
+                element: <ProductPage />
+            },
+            {
                 index: true,
                 element: <Catalog />
             },
@@ -35,8 +41,8 @@ const router = createBrowserRouter([
                 element: <Cart />
             },
             {
-                path: ':productId',
-                element: <ProductPage />
+                path: '*',
+                element: <div>404</div>
             }
         ]
     },
@@ -51,13 +57,17 @@ declare global {
 root.render(
     <React.StrictMode>
         <MantineProvider theme={theme}>
-            <CurrencyProvider>
-                <DataProvider>
-                    <CartProvider>
-                        <RouterProvider router={router} />
-                    </CartProvider>
-                </DataProvider>
-            </CurrencyProvider>
+            <ConfigProvider>
+                <TranslationProvider>
+                    <DataProvider>
+                        <CurrencyProvider>
+                            <CartProvider>
+                                <RouterProvider router={router} />
+                            </CartProvider>
+                        </CurrencyProvider>
+                    </DataProvider>
+                </TranslationProvider>
+            </ConfigProvider>
         </MantineProvider>
     </React.StrictMode>
 )

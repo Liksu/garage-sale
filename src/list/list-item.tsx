@@ -1,10 +1,11 @@
-import { ReactElement } from 'react'
+import { ReactElement, useContext } from 'react'
 import { Product } from '../types'
 import { Badge, Card, Group, Text, Title } from '@mantine/core'
 import Price from '../helpers/price'
 import CartButton from '../cart/cart-button'
 import Photo from '../helpers/photo'
 import useNavigateWithQuery from '../helpers/use-navigate-with-query'
+import { TranslationContext } from '../helpers/translation-provider'
 
 interface ListItemProps {
     product: Product
@@ -12,6 +13,7 @@ interface ListItemProps {
 
 export default function ListItem({ product }: ListItemProps): ReactElement {
     const navigate = useNavigateWithQuery()
+    const { t } = useContext(TranslationContext)
 
     const goToProduct = () => {
         navigate(`/${product.id}`)
@@ -32,7 +34,7 @@ export default function ListItem({ product }: ListItemProps): ReactElement {
             <Group justify="space-between">
                 <Title order={3} fw={400} c="red"><Price sum={product.price} /></Title>
                 {product.booked
-                    ? <Badge color="yellow" variant="light" size="sm">Заброньовано</Badge>
+                    ? <Badge color="yellow" variant="light" size="sm">{t('booked')}</Badge>
                     : null}
                 <CartButton product={product} />
             </Group>
