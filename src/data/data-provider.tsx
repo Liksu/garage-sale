@@ -24,9 +24,8 @@ export const DataContext = createContext<DataProviderType>({
 const defaultProductsURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTHMD4_md7j2ilBSLg_qrAl3lo3IYXWWCSYtDZvaTEV7FfBwBu2D7f-B-dk31-kvFV_lXvs98dHpc7e/pub?gid=1077703447&single=true&output=tsv'
 
 export const DataProvider: FC<PropsWithChildren> = ({ children }) => {
-    const { extractConfigs } = useContext(ConfigContext)
     const [products, setProducts] = useState<Products | null>(null)
-    const [loading, loadProducts] = useLoader<Array<Product | Config>>({
+    const [loading, loadProducts] = useLoader<Products>({
         param: 'products',
         defaultURL: defaultProductsURL,
         defaultValue: []
@@ -34,11 +33,7 @@ export const DataProvider: FC<PropsWithChildren> = ({ children }) => {
     
     useEffect(() => {
         loadProducts()
-            .then(data => {
-                if (!data || !data.length) return
-                const products = extractConfigs<Product>(data)
-                setProducts(products)
-            })
+            .then(setProducts)
             .catch(console.error)
     }, [])
 

@@ -1,0 +1,24 @@
+{
+  "empty cart": "The cart is empty",
+  "total": "Total",
+  "share cart": "Share cart",
+  "share cart description": [
+    "To send a request for booking - copy the selected products and send it to us by email or messenger.",
+    "Also, you can share the selected products using the link."
+  ],
+  "copy text": "Copy text",
+  "copy link": "Copy link",
+  "copied": "Copied",
+  "make a copy": "Make a copy",
+  "selected products": "Selected products",
+  "no products": "No products",
+  "product categories": [
+    "Available",
+    "Booked",
+    "Sold"
+  ],
+  "booked": "Booked",
+  "sold": "Sold",
+  "show more": "Show more",
+  "hide": "Hide"
+}

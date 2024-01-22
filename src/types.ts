@@ -26,4 +26,7 @@ export interface Config {
     config: true
     defaultCurrency?: Currency
     defaultLanguage?: string
+    languages?: string[]
 }
+
+export type ResponseList<T> = Array<(T extends Array<infer U> ? U : T) | Config>

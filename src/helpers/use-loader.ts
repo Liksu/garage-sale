@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { ConfigContext } from './config-provider'
+import { ResponseList } from '../types'
 
 interface LoaderHookConfig<T> {
     param: string
@@ -6,8 +8,9 @@ interface LoaderHookConfig<T> {
     defaultValue: T
 }
 
-export const useLoader = <T = unknown>({ param, defaultURL, defaultValue }: LoaderHookConfig<T>): [boolean, () => Promise<T>] => {
+export const useLoader = <T = unknown[]>({ param, defaultURL, defaultValue }: LoaderHookConfig<T>): [boolean, () => Promise<T>] => {
     const [loading, setLoading] = useState(false)
+    const { extractConfigs } = useContext(ConfigContext)
     
     const link = window.params.get(param) ?? defaultURL
     if (!link) return [false, async () => defaultValue]
@@ -18,9 +21,10 @@ export const useLoader = <T = unknown>({ param, defaultURL, defaultValue }: Load
         setLoading(true)
         
         return new Promise<T>(async (resolver, reject) => {
-            const resolve = (data: T) => {
+            const resolve = (data: ResponseList<T>) => {
                 setLoading(false)
-                resolver(data)
+                const res = extractConfigs(data) as T
+                resolver(res)
             }
             
             const response = await fetch(link, { cache: 'no-store' })
@@ -32,9 +36,9 @@ export const useLoader = <T = unknown>({ param, defaultURL, defaultValue }: Load
                 if (window.Worker) {
                     const worker = new Worker('/loader.js')
                     worker.postMessage(data)
-                    worker.onmessage = (event: MessageEvent<T>) => {
+                    worker.onmessage = (event: MessageEvent<ResponseList<T>>) => {
                         if (Array.isArray(event.data)) resolve(event.data)
-                        else resolve(defaultValue)
+                        else resolve(defaultValue as ResponseList<T>)
                     }
                 } else {
                     reject(new Error( 'Cannot parse JS file'))

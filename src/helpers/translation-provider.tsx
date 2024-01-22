@@ -21,7 +21,7 @@ export const TranslationProvider: FC<PropsWithChildren> = ({ children }) => {
     const [dictionary, setDictionary] = useState<Dictionary>({})
     const [loading, loadTranslations] = useLoader<Dictionary>({
         param: 'lang',
-        defaultURL: '/data/lang.ua.json',
+        defaultURL: '/data/lang.uk.json',
         defaultValue: {}
     })
 

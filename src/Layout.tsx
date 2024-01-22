@@ -3,6 +3,7 @@ import { AppShell, Group, Title } from '@mantine/core'
 import CartWidget from './cart/cart-widget'
 import { Outlet, useMatch } from 'react-router-dom'
 import LinkWithQuery from './helpers/link-with-query'
+import LanguagePicker from './config/language-picker'
 
 function Layout() {
     const isActive = useMatch('/') != null
@@ -19,7 +20,10 @@ function Layout() {
                     {isActive
                         ? logo
                         : <LinkWithQuery to={'/'} style={{ textDecoration: 'none' }}>{logo}</LinkWithQuery>}
-                    <CartWidget />
+                    <Group>
+                        <LanguagePicker />
+                        <CartWidget />
+                    </Group>
                 </Group>
             </AppShell.Header>
 
