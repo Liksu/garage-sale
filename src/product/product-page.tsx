@@ -1,18 +1,16 @@
 import { ReactElement, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { DataContext } from '../data/data-provider'
-import { Badge, Button, Group, Space, Spoiler, Stack, Title, useMantineTheme } from '@mantine/core'
+import { Badge, Group, Space, Spoiler, Stack, Title, useMantineTheme } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
 import Photo from '../helpers/photo'
 import { useMediaQuery } from '@mantine/hooks'
 import classes from './product-page.module.css'
 import Price from '../helpers/price'
 import CartButton from '../cart/cart-button'
-import { IconExternalLink } from '@tabler/icons-react'
-import ShortUrl from '../helpers/short-url'
 import NavigateWithQuery from '../helpers/navigate-with-query'
-import LinkWithQuery from '../helpers/link-with-query'
 import { TranslationContext } from '../helpers/translation-provider'
+import ExternalLink from '../helpers/external-link'
 
 export default function ProductPage(): ReactElement {
     const params = useParams()
@@ -71,11 +69,7 @@ export default function ProductPage(): ReactElement {
         <Space h="md" />
         <Group gap="md">
             {product.urls?.map(url => (
-                <LinkWithQuery to={url} key={url} target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" rightSection={<IconExternalLink size={16} />}>
-                        <ShortUrl url={url} />
-                    </Button>
-                </LinkWithQuery>
+                <ExternalLink url={url} key={url} />
             )) ?? null}
         </Group>
     </Stack>)

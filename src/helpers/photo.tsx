@@ -16,6 +16,7 @@ export default function Photo({ product, image, fit = 'contain', height, style =
     const url = image.startsWith('http') ? image : `/data/photos/${product.id}/${image}`
     return <Image
         src={url}
+        referrerPolicy="unsafe-url"
         fallbackSrc="/no-photo.png"
         alt={product.name}
         height={height ?? 200}
