@@ -1,0 +1,17 @@
+{
+  "name": "sale-server",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "prod:start": "pm2 start ecosystem.config.cjs",
+    "prod:stop": "pm2 stop sale.liksu.com && pm2 delete sale.liksu.com",
+    "prod:restart": "pm2 restart sale.liksu.com",
+    "prod:update": "git pull && npm i && npm run prod:restart"
+
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "puppeteer": "^21.9.0"
+  }
+}
