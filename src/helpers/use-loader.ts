@@ -6,9 +6,10 @@ interface LoaderHookConfig<T> {
     param: string
     defaultURL?: string
     defaultValue: T
+    onLoad?: (data: T) => void
 }
 
-export const useLoader = <T = unknown[]>({ param, defaultURL, defaultValue }: LoaderHookConfig<T>): [boolean, () => Promise<T>] => {
+export const useLoader = <T = unknown[]>({ param, defaultURL, defaultValue, onLoad }: LoaderHookConfig<T>): [boolean, () => Promise<T>] => {
     const [loading, setLoading] = useState(false)
     const { extractConfigs } = useContext(ConfigContext)
     
@@ -24,6 +25,7 @@ export const useLoader = <T = unknown[]>({ param, defaultURL, defaultValue }: Lo
             const resolve = (data: ResponseList<T>) => {
                 setLoading(false)
                 const res = extractConfigs(data) as T
+                if (onLoad) onLoad(res)
                 resolver(res)
             }
             

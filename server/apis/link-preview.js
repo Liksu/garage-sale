@@ -1,5 +1,11 @@
 import puppeteer from 'puppeteer'
 
+const allowedOrigins = [
+    new RegExp('^https://sale\\.liksu\\.com/', 'i'),
+    new RegExp('^http://localhost(:\\d+)?/', 'i'),
+    new RegExp('^http://127\\.0\\.0\\.1(:\\d+)?/', 'i'),
+]
+
 const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox']
 })
@@ -7,7 +13,8 @@ const browser = await puppeteer.launch({
 const cache = new Map()
 
 export default async function handler(req, res) {
-    if (!req.headers.referer?.startsWith('https://sale.liksu.com/')) {
+    const isAllowed = req.headers.referer && allowedOrigins.some(origin => origin.test(req.headers.referer))
+    if (!isAllowed) {
         return res.status(404).send('Not Found')
     }
     
@@ -15,17 +22,19 @@ export default async function handler(req, res) {
         return res.status(400).send('Missing url')
     }
 
-    const cached = cache.get(req.query.url)
-    if (cached) return res.json(cached)
-
-    try {
-        const data = await getPreview(req.query.url)
-        cache.set(req.query.url, data)
-        return res.json(data)
-    } catch (e) {
-        console.log('Error loading', e)
-        return res.status(500).send('Error: ' + (e.message ?? ''))
+    if (cache.has(req.query.url)) {
+        return res.json(cache.get(req.query.url))
     }
+    
+    let data = null
+    try {
+        data = await getPreview(req.query.url)
+        res.json(data)
+    } catch (e) {
+        res.status(500).send('Error: ' + (e.message ?? ''))
+    }
+
+    cache.set(req.query.url, data)
 }
 
 async function getPreview(url) {

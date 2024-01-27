@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { FC, PropsWithChildren, useContext } from 'react'
 import ReactDOM from 'react-dom/client'
 import '@mantine/core/styles.css'
 import '@mantine/carousel/styles.css'
 import './index.css'
 import Layout from './Layout'
 import { createTheme, MantineProvider } from '@mantine/core'
-import { DataProvider } from './data/data-provider'
+import { DataContext, DataProvider } from './data/data-provider'
 import { CartProvider } from './cart/cart-provider'
 import { CurrencyProvider } from './helpers/currency-provider'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
@@ -23,30 +23,36 @@ const theme = createTheme({
     /** Put your mantine theme override here */
 })
 
-const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Layout />,
-        children: [
-            {
-                path: ':productId',
-                element: <ProductPage />
-            },
-            {
-                index: true,
-                element: <Catalog />
-            },
-            {
-                path: 'cart',
-                element: <Cart />
-            },
-            {
-                path: '*',
-                element: <div>404</div>
-            }
-        ]
-    },
-])
+const RoutableApp: FC = () => {
+    const { loaderPromise } = useContext(DataContext)
+    
+    const router = createBrowserRouter([
+        {
+            path: '/',
+            element: <Layout />,
+            errorElement: <div>404</div>,
+            loader: () => loaderPromise,
+            children: [
+                {
+                    index: true,
+                    element: <Catalog />
+                },
+                {
+                    path: ':productId',
+                    element: <ProductPage />
+                },
+                {
+                    path: 'cart',
+                    element: <Cart />
+                },
+            ]
+        },
+    ])
+
+    return (
+        <RouterProvider router={router} />
+    )
+}
 
 declare global {
     interface Window {
@@ -62,7 +68,7 @@ root.render(
                     <DataProvider>
                         <CurrencyProvider>
                             <CartProvider>
-                                <RouterProvider router={router} />
+                                <RoutableApp />
                             </CartProvider>
                         </CurrencyProvider>
                     </DataProvider>

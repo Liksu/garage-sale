@@ -3,6 +3,7 @@
   "version": "1.2.0",
   "private": true,
   "homepage": "https://sale.liksu.com",
+  "proxy": "http://localhost:4110",
   "dependencies": {
     "@mantine/carousel": "^7.4.1",
     "@mantine/core": "^7.4.1",

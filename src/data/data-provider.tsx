@@ -9,8 +9,15 @@ export interface DataProviderType {
     filterProducts: (filter: string) => Products | null
     showSelected: (ids: Cart) => Products
     getPrice: (id: string, currency?: Currency | null) => number
+    loadProducts: () => Promise<Products>
     loading?: boolean
+    loaderPromise: Promise<Products>
 }
+
+const promiseHolder: {resolve: (value: (Products | PromiseLike<Products>)) => void} = {resolve: () => []}
+const loaderPromise = new Promise<Products>(resolve => {
+    promiseHolder.resolve = resolve
+})
 
 export const DataContext = createContext<DataProviderType>({
     products: null,
@@ -18,6 +25,8 @@ export const DataContext = createContext<DataProviderType>({
     filterProducts: () => null,
     showSelected: () => [],
     getPrice: () => 0,
+    loadProducts: () => Promise.resolve([]),
+    loaderPromise,
     loading: false
 })
 
@@ -28,12 +37,15 @@ export const DataProvider: FC<PropsWithChildren> = ({ children }) => {
     const [loading, loadProducts] = useLoader<Products>({
         param: 'products',
         defaultURL: defaultProductsURL,
-        defaultValue: []
+        defaultValue: [],
     })
     
     useEffect(() => {
         loadProducts()
-            .then(setProducts)
+            .then(products => {
+                setProducts(products)
+                promiseHolder.resolve(products)
+            })
             .catch(console.error)
     }, [])
 
@@ -70,7 +82,9 @@ export const DataProvider: FC<PropsWithChildren> = ({ children }) => {
             filterProducts,
             showSelected,
             getPrice,
-            loading
+            loadProducts,
+            loading,
+            loaderPromise,
         }}>
             {children}
         </DataContext.Provider>
