@@ -1,7 +1,6 @@
-import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from 'react'
-import { Cart, Config, Currency, Product, Products } from '../types'
+import { createContext, FC, PropsWithChildren, useEffect, useState } from 'react'
+import { Cart, Currency, Product, Products, PromiseHolder } from '../types'
 import { useLoader } from '../helpers/use-loader'
-import { ConfigContext } from '../helpers/config-provider'
 
 export interface DataProviderType {
     products: Products | null
@@ -14,7 +13,7 @@ export interface DataProviderType {
     loaderPromise: Promise<Products>
 }
 
-const promiseHolder: {resolve: (value: (Products | PromiseLike<Products>)) => void} = {resolve: () => []}
+const promiseHolder: PromiseHolder<Products> = {resolve: () => []}
 const loaderPromise = new Promise<Products>(resolve => {
     promiseHolder.resolve = resolve
 })

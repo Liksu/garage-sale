@@ -30,3 +30,5 @@ export interface Config {
 }
 
 export type ResponseList<T> = Array<(T extends Array<infer U> ? U : T) | Config>
+
+export type PromiseHolder<T> = {resolve: (value: (T | PromiseLike<T>)) => void}
