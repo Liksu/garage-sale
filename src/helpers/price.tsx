@@ -7,10 +7,12 @@ interface PriceProps {
     currency?: Currency | null
 }
 
-export default function Price({ sum = 0, currency }: PriceProps): ReactElement {
+export default function Price({ sum, currency }: PriceProps): ReactElement {
     const { currency: providedCurrency } = useContext(CurrencyContext)
     currency ||= providedCurrency
-    
+
+    if (sum == null) return (<>—</>)
+
     if (typeof sum === 'object') {
         const currencyKey = Object.keys(sum).find(key => key.toUpperCase() === currency?.toUpperCase())
         if (!currencyKey) return (<>?</>)
@@ -27,6 +29,7 @@ export default function Price({ sum = 0, currency }: PriceProps): ReactElement {
 }
 
 export function price(sum: number, currency?: Currency | null, symbol = true): string {
+    if (isNaN(+sum)) return '—'
     if (!currency) return Intl.NumberFormat(navigator.language, { maximumFractionDigits: 0 }).format(sum)
     
     return new Intl.NumberFormat(
