@@ -2,6 +2,14 @@ import puppeteer from 'puppeteer'
 
 const browser = await puppeteer.launch({
     args: [
+        `--window-size=800,600`,
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--disable-gpu',
         '--aggressive-cache-discard',
         '--disable-cache',
         '--disable-application-cache',
