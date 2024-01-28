@@ -1,7 +1,7 @@
 import { ReactElement, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { DataContext } from '../data/data-provider'
-import { Badge, Group, Space, Spoiler, Stack, Title, useMantineTheme } from '@mantine/core'
+import { Badge, Group, Space, Spoiler, Stack, Title, Text, useMantineTheme } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
 import Photo from '../helpers/photo'
 import { useMediaQuery } from '@mantine/hooks'
@@ -63,7 +63,7 @@ export default function ProductPage(): ReactElement {
         </Group>
 
         <Spoiler maxHeight={mobile ? 120 : 300} showLabel={t('show more')} hideLabel={t('hide')} transitionDuration={0}>
-            {product.description}
+            {product.description?.split(/\s+\//).map((text, i) => <Text key={i}>{text}</Text>)}
         </Spoiler>
 
         <Space h="md" />
