@@ -4,7 +4,7 @@ import { DataContext } from '../data/data-provider'
 import { Badge, Group, Space, Spoiler, Stack, Title, Text, useMantineTheme } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
 import Photo from '../helpers/photo'
-import { useMediaQuery } from '@mantine/hooks'
+import { useHotkeys, useMediaQuery } from '@mantine/hooks'
 import classes from './product-page.module.css'
 import Price from '../helpers/price'
 import CartButton from '../cart/cart-button'
@@ -18,6 +18,10 @@ export default function ProductPage(): ReactElement {
     const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`)
     const { getProductById } = useContext(DataContext)
     const { t } = useContext(TranslationContext)
+    useHotkeys([
+        ['ArrowLeft', event => document.querySelectorAll<HTMLButtonElement>('.mantine-Carousel-control')[0]?.click()],
+        ['ArrowRight', event => document.querySelectorAll<HTMLButtonElement>('.mantine-Carousel-control')[1]?.click()]
+    ])
 
     if (!params.productId) {
         return <NavigateWithQuery to={'/'} />
