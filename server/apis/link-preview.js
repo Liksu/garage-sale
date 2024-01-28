@@ -1,11 +1,5 @@
 import puppeteer from 'puppeteer'
 
-const allowedOrigins = [
-    new RegExp('^https://sale\\.liksu\\.com/', 'i'),
-    new RegExp('^http://localhost(:\\d+)?/', 'i'),
-    new RegExp('^http://127\\.0\\.0\\.1(:\\d+)?/', 'i'),
-]
-
 const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox']
 })
@@ -13,11 +7,6 @@ const browser = await puppeteer.launch({
 const cache = new Map()
 
 export default async function handler(req, res) {
-    const isAllowed = req.headers.referer && allowedOrigins.some(origin => origin.test(req.headers.referer))
-    if (!isAllowed) {
-        return res.status(404).send('Not Found')
-    }
-    
     if (!req.query.url) {
         return res.status(400).send('Missing url')
     }
