@@ -1,6 +1,6 @@
 import { createContext, FC, PropsWithChildren, useEffect, useState } from 'react'
 import { useLoader } from './use-loader'
-import { Dictionary, Translation } from '../types'
+import { Dictionary, PromiseHolder, Translation } from '../types'
 
 
 export interface TranslationProviderType {
@@ -8,13 +8,20 @@ export interface TranslationProviderType {
     t: (key: string) => string
     ta: (key: string) => Array<string>
     to: (key: string) => Dictionary
+    translationPromise: Promise<Dictionary>
 }
+
+const promiseHolder: PromiseHolder<Dictionary> = {resolve: () => {}}
+const translationPromise = new Promise<Dictionary>(resolve => {
+    promiseHolder.resolve = resolve
+})
 
 export const TranslationContext = createContext<TranslationProviderType>({
     dictionary: {},
     t: () => '',
     ta: () => [],
-    to: () => ({})
+    to: () => ({}),
+    translationPromise,
 })
 
 export const TranslationProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -27,7 +34,10 @@ export const TranslationProvider: FC<PropsWithChildren> = ({ children }) => {
 
     useEffect(() => {
         loadTranslations()
-            .then(setDictionary)
+            .then(data => {
+                setDictionary(data)
+                promiseHolder.resolve(data)
+            })
             .catch(console.error)
     }, [])
     
@@ -77,7 +87,8 @@ export const TranslationProvider: FC<PropsWithChildren> = ({ children }) => {
             dictionary,
             t,
             ta,
-            to
+            to,
+            translationPromise,
         }}>
             {children}
         </TranslationContext.Provider>

@@ -16,9 +16,8 @@ export default function Photo({ product, image, fit = 'contain', height, style =
     const [opened, { close, open }] = useDisclosure(false)
     const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
     
-    image ??= product.images?.[0]
-    if (!image) return (<></>)
-    const url = image.startsWith('http') ? image : `/data/photos/${product.id}/${image}`
+    const url = composePhotoURL(product, image)
+    if (!url) return (<></>)
     
     return (<>
         <Modal opened={opened} onClose={close} centered withCloseButton={false} size="100%">
@@ -44,4 +43,10 @@ export default function Photo({ product, image, fit = 'contain', height, style =
             {...rest}
         />
     </>)
+}
+
+export function composePhotoURL(product: Product, image?: string): string | null {
+    image ??= product.images?.[0]
+    if (!image) return null
+    return image.startsWith('http') ? image : window.location.origin + `/data/photos/${product.id}/${image}`
 }

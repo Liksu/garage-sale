@@ -12,7 +12,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import ProductPage from './product/product-page'
 import Catalog from './list/catalog'
 import Cart from './cart/cart'
-import { TranslationProvider } from './helpers/translation-provider'
+import { TranslationContext, TranslationProvider } from './helpers/translation-provider'
 import { ConfigProvider } from './helpers/config-provider'
 
 const root = ReactDOM.createRoot(
@@ -24,14 +24,18 @@ const theme = createTheme({
 })
 
 const RoutableApp: FC = () => {
-    const { loaderPromise } = useContext(DataContext)
+    const { loaderPromise: dataPromise } = useContext(DataContext)
+    const { translationPromise } = useContext(TranslationContext)
     
     const router = createBrowserRouter([
         {
             path: '/',
             element: <Layout />,
             errorElement: <div>404</div>,
-            loader: () => loaderPromise,
+            loader: () => Promise.all([
+                dataPromise,
+                translationPromise
+            ]),
             children: [
                 {
                     index: true,
