@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import { Product } from '../types'
-import { Image, Modal } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
+import { em, Image, Modal } from '@mantine/core'
+import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 
 interface PhotoProps {
     product: Product
@@ -14,13 +14,14 @@ interface PhotoProps {
 
 export default function Photo({ product, image, fit = 'contain', height, style = {}, expandable, ...rest }: PhotoProps): ReactElement {
     const [opened, { close, open }] = useDisclosure(false)
+    const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
     
     image ??= product.images?.[0]
     if (!image) return (<></>)
     const url = image.startsWith('http') ? image : `/data/photos/${product.id}/${image}`
     
     return (<>
-        <Modal opened={opened} onClose={close} centered withCloseButton={false}>
+        <Modal opened={opened} onClose={close} centered withCloseButton={false} size="100%">
             <Image
                 src={url}
                 referrerPolicy="unsafe-url"
@@ -39,7 +40,7 @@ export default function Photo({ product, image, fit = 'contain', height, style =
             alt={product.name}
             height={height ?? 200}
             style={{ objectFit: fit, ...style }}
-            onClick={expandable ? open : undefined}
+            onClick={expandable && !isMobile ? open : undefined}
             {...rest}
         />
     </>)
