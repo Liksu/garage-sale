@@ -32,7 +32,7 @@ export default function ListItem({ product }: ListItemProps): ReactElement {
                 : null}
 
             <Group justify="space-between">
-                <Title order={3} fw={400} c="red"><Price sum={product.price} /></Title>
+                <Title order={3} fw={400} c={product.sold ? 'pink.3' : 'red'}><Price sum={product.price} /></Title>
                 {product.booked
                     ? <Badge color="yellow" variant="light" size="sm">{t('booked')}</Badge>
                     : null}
