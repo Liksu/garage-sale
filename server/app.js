@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 })
 
 app.get('/api/link-preview/', LinkPreviewHandler)
-app.get('/api/photos/', PhotosListHandler)
+// app.get('/api/photos/', PhotosListHandler)
 
 app.listen(port, () => {
     console.log(`Link preview app listening at http://localhost:${port}`)
