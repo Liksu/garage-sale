@@ -20,7 +20,7 @@ export default function Photo({ product, image, fit = 'contain', height, style =
     if (!url) return (<></>)
     
     return (<>
-        <Modal opened={opened} onClose={close} centered withCloseButton={false} size="100%">
+        <Modal opened={opened} onClose={close} centered withCloseButton={false} size={isMobile ? undefined : '100%'} fullScreen={isMobile}>
             <Image
                 src={url}
                 referrerPolicy="unsafe-url"
@@ -39,7 +39,7 @@ export default function Photo({ product, image, fit = 'contain', height, style =
             alt={product.name}
             height={height ?? 200}
             style={{ objectFit: fit, ...style }}
-            onClick={expandable && !isMobile ? open : undefined}
+            onClick={expandable ? open : undefined}
             {...rest}
         />
     </>)
