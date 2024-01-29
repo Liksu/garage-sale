@@ -28,7 +28,7 @@ export default function ListItem({ product }: ListItemProps): ReactElement {
             <Title order={4} my="md" c={product.sold ? 'gray.3' : 'black'}>{product.name}</Title>
 
             {product.shortDescription
-                ? <Text size="sm" c="dimmed">{product.shortDescription}</Text>
+                ? <Text size="sm" c="dimmed" mb="sm">{product.shortDescription}</Text>
                 : null}
 
             <Group justify="space-between">
