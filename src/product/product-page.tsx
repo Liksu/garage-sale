@@ -79,7 +79,7 @@ export default function ProductPage(): ReactElement {
 
             <Spoiler maxHeight={mobile ? 120 : 300} showLabel={t('show more')} hideLabel={t('hide')}
                      transitionDuration={0}>
-                {product.description?.split(/\s+\//).map((text, i) => <Text key={i}>{text}</Text>)}
+                {product.description?.split(/ +\//).map((text, i) => <Text key={i}>{text}</Text>)}
             </Spoiler>
 
             <Space h="md" />
