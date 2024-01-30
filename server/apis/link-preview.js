@@ -43,6 +43,10 @@ export default async function handler(req, res) {
         return res.status(400).send('Missing url')
     }
 
+    if (req.query.flush != null && req.query.flush !== '' && cache.has(req.query.url)) {
+        cache.delete(req.query.url)
+    }
+    
     if (cache.has(req.query.url)) {
         return res.json(cache.get(req.query.url))
     }
@@ -62,7 +66,9 @@ async function getPreview(url) {
     const page = await browser.newPage()
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36')
     await page.goto(url)
-    
+
+    await new Promise(resolve => setTimeout(resolve, 640))
+
     const metas = await page.evaluate(() => {
         const tags = document.getElementsByTagName('meta')
         const pairs = Array.from(tags, tag => [tag.getAttribute('property') || tag.name, tag.content]).filter(item => item[0])
