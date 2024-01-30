@@ -35,7 +35,7 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     const { products, getPrice } = useContext(DataContext)
     const [cart, setCart] = useState<Cart>(initialCart ?? [])
     const [sum, setSum] = useState(0)
-    const { currency } = useContext(CurrencyContext)
+    const { currency, loading: currencyLoading } = useContext(CurrencyContext)
     const [showOnlyCart, setShowOnlyCart] = useState(false)
 
     const addToCart = (id: string) => {
@@ -51,7 +51,7 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         const sum = cart.reduce((acc, id) => acc + getPrice(id, currency), 0)
         setSum(() => sum)
         window.localStorage.setItem('cart', JSON.stringify(cart))
-    }, [cart, products])
+    }, [cart, products, currencyLoading, currency])
 
     const checkCart = (id: string) => {
         return cart.includes(id)
