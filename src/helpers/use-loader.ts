@@ -36,7 +36,7 @@ export const useLoader = <T = unknown[]>({ param, defaultURL, defaultValue, onLo
                 response = new Response(null, { statusText: 'try:proxy' })
             }
             if (response.statusText === 'try:proxy' || response.type === 'opaque' || response.status === 0) {
-                response = await fetch(`/api/proxy?url=${encodeURIComponent(link)}`)
+                response = await fetch(`/api/proxy?url=${encodeURIComponent(link)}`, { cache: 'no-store' })
             }
             if (!response.ok) return reject(response.statusText)
             
