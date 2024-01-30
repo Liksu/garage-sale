@@ -67,7 +67,7 @@ async function getPreview(url) {
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36')
     await page.goto(url)
 
-    await new Promise(resolve => setTimeout(resolve, 640))
+    await new Promise(resolve => setTimeout(resolve, 1000))
 
     const metas = await page.evaluate(() => {
         const tags = document.getElementsByTagName('meta')
