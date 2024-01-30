@@ -33,11 +33,11 @@ export default function ProductPage(): ReactElement {
         return <NavigateWithQuery to={'/'} />
     }
 
-    const slides = product.images.map(image => (
+    const slides = product.images?.map(image => (
         <Carousel.Slide key={image}>
             <Photo product={product} image={image} height={400} expandable />
         </Carousel.Slide>
-    ))
+    )) ?? []
 
     const ogDescription = product.shortDescription ?? product.description
     const ogImage = composePhotoURL(product)
@@ -59,7 +59,7 @@ export default function ProductPage(): ReactElement {
                     : null}
             <Space h="md" />
 
-            <Carousel
+            {slides.length ? <Carousel
                 classNames={classes}
                 slideSize="100%"
                 height={400}
@@ -68,7 +68,7 @@ export default function ProductPage(): ReactElement {
                 withIndicators
             >
                 {slides}
-            </Carousel>
+            </Carousel> : null}
 
             <Space h="md" />
 

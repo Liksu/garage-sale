@@ -29,7 +29,15 @@ export const useLoader = <T = unknown[]>({ param, defaultURL, defaultValue, onLo
                 resolver(res)
             }
             
-            const response = await fetch(link, { cache: 'no-store' })
+            let response
+            try {
+                response = await fetch(link, { cache: 'no-store', mode: 'no-cors' })
+            } catch (e) {
+                response = new Response(null, { statusText: 'try:proxy' })
+            }
+            if (response.statusText === 'try:proxy' || response.type === 'opaque' || response.status === 0) {
+                response = await fetch(`/api/proxy?url=${encodeURIComponent(link)}`)
+            }
             if (!response.ok) return reject(response.statusText)
             
             const data = await response[isJS ? 'text' : 'json']()

@@ -2,6 +2,7 @@ import express from 'express'
 
 import LinkPreviewHandler from './apis/link-preview.js'
 import PhotosListHandler from './apis/photos.js'
+import ProxyHandler from './apis/proxy.js'
 
 const app = express()
 const port = 4110
@@ -24,6 +25,7 @@ app.use((req, res, next) => {
 
 app.get('/api/link-preview/', LinkPreviewHandler)
 // app.get('/api/photos/', PhotosListHandler)
+app.get('/api/proxy/', ProxyHandler)
 
 app.listen(port, () => {
     console.log(`Link preview app listening at http://localhost:${port}`)
