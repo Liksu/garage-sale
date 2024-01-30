@@ -53,6 +53,15 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         window.localStorage.setItem('cart', JSON.stringify(cart))
     }, [cart, products, currencyLoading, currency])
 
+    useEffect(() => {
+        if (!products) return
+        const storedCartString = window.localStorage.getItem('cart')
+        if (!storedCartString) return
+        const storedCart = JSON.parse(storedCartString) as Cart
+        const filteredCart = storedCart.filter(id => products.find(product => product.id === id))
+        setCart(() => filteredCart)
+    }, [products])
+
     const checkCart = (id: string) => {
         return cart.includes(id)
     }
