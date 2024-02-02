@@ -28,7 +28,7 @@ export const useLoader = <T = unknown[]>({ param, defaultURL, defaultValue, onLo
                 if (onLoad) onLoad(res)
                 resolver(res)
             }
-            
+
             let response
             try {
                 response = await fetch(link, { cache: 'no-store', mode: 'no-cors' })

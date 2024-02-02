@@ -21,5 +21,6 @@
   "sold": "Sold",
   "show more": "Show more",
   "hide": "Hide",
-  "I want this": ["I want this", "Don't want it anymore"]
+  "I want this": ["I want this", "Don't want it anymore"],
+  "condition": "Condition"
 }

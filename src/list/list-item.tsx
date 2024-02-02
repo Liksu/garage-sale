@@ -25,8 +25,12 @@ export default function ListItem({ product }: ListItemProps): ReactElement {
                 <Photo product={product} style={product.sold ? { opacity: 0.5 } : {}} />
             </Card.Section>
 
-            <Title order={4} my="md" c={product.sold ? 'gray.3' : 'black'}>{product.name}</Title>
+            <Title order={4} mt="md" mb={product.condition ? 'xs' : 'md'} c={product.sold ? 'gray.3' : 'black'}>{product.name}</Title>
 
+            {product.condition
+                ? <Text size="xs" c="dimmed" mb="sm" mt={0}>{t('condition')}: {product.condition}</Text>
+                : null}
+            
             {product.shortDescription
                 ? <Text size="sm" c="dimmed" mb="sm">{product.shortDescription}</Text>
                 : null}

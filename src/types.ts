@@ -3,6 +3,8 @@ export interface Product {
     id: ProductId
     name: string
     price: Record<string, number>
+    condition?: string
+    tags?: string[]
     shortDescription?: string
     description?: string
     images: string[]

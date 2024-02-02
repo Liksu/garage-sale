@@ -51,13 +51,17 @@ export default function ProductPage(): ReactElement {
         </Helmet>
         <Stack gap="sm">
             <Title order={2}>{product.name}</Title>
+            {product.condition
+                ? <Text size="xs" c="dimmed" mb="xs" mt={0}>{t('condition')}: {product.condition}</Text>
+                : null}
+
             {product.sold
                 ? <Badge color="red" variant="light" size="xl">{t('sold')}</Badge>
                 :
                 product.booked
                     ? <Badge color="yellow" variant="light" size="xl">{t('booked')}</Badge>
                     : null}
-            <Space h="md" />
+            <Space h="xs" />
 
             {slides.length ? <Carousel
                 classNames={classes}
