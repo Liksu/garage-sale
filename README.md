@@ -11,6 +11,8 @@ Array<{
     id: string
     name: string
     price: Record<string, number>
+    condition?: string
+    tags?: string[]
     shortDescription?: string
     description?: string
     images: string[]
