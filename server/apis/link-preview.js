@@ -47,6 +47,11 @@ export default async function handler(req, res) {
         cache.delete(req.query.url)
     }
     
+    if (req.query.remove != null && req.query.remove !== '' && cache.has(req.query.url)) {
+        cache.delete(req.query.url)
+        return res.status(200).send('Removed')
+    }
+    
     if (cache.has(req.query.url)) {
         return res.json(cache.get(req.query.url))
     }
@@ -54,6 +59,11 @@ export default async function handler(req, res) {
     let data = null
     try {
         data = await getPreview(req.query.url)
+        
+        if (data.pageTitle === 'Just a moment...') {
+            return res.status(503).send('Cloudflare protection')
+        }
+        
         res.json(data)
     } catch (e) {
         res.status(500).send('Error: ' + (e.message ?? ''))
